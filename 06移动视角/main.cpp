@@ -142,14 +142,12 @@ int main(int argc, char** argv) {
         for (int i=0; i<model->nfaces(); i++) {
             std::vector<int> face = model->face(i);
             Vec3i screen_coords[3];
-            Vec3f world_coords[3];
             float intensity[3];
             float distance[3];
             for (int j=0; j<3; j++) {
                 Vec3f v = model->vert(face[j]);
                 Matrix m_v = ModelView* Matrix(v);
                 screen_coords[j] =  Vec3f(ViewPort*Projection* m_v);
-                world_coords[j]  = v;
                 intensity[j] = model->norm(i, j)*light_dir;
                 Vec3f new_v = Vec3f(m_v);
                 distance[j] = std::pow((std::pow(new_v.x - eye.x,2.0f)+ std::pow(new_v.y - eye.y, 2.0f)+ std::pow(new_v.z - eye.z, 2.0f)),0.5f);
