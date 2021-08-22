@@ -28,7 +28,7 @@ struct GouraudShader : public IShader {
         varying_uv.set_col(nthvert, model->uv(iface, nthvert));
         //变换顶点坐标到屏幕坐标（视角矩阵*投影矩阵*变换矩阵*v）
         mat<4, 4, float> uniform_M = Projection * ModelView;
-        mat<4, 4, float> uniform_MIT = (Projection * ModelView).invert_transpose();
+        mat<4, 4, float> uniform_MIT = ModelView.invert_transpose();
         gl_Vertex = Viewport* uniform_M *gl_Vertex;
         //计算光照强度（顶点法向量*光照方向）
         Vec3f normal = proj<3>(embed<4>(model->normal(iface, nthvert))).normalize();
@@ -103,7 +103,7 @@ struct FlatShader : public IShader {
 struct PhongShader : public IShader {
     mat<2, 3, float> varying_uv;  // same as above
     mat<4, 4, float> uniform_M = Projection * ModelView;
-    mat<4, 4, float> uniform_MIT = (Projection * ModelView).invert_transpose();
+    mat<4, 4, float> uniform_MIT = ModelView.invert_transpose();
     virtual Vec4f vertex(int iface, int nthvert) {
         varying_uv.set_col(nthvert, model->uv(iface, nthvert));
         Vec4f gl_Vertex = embed<4>(model->vert(iface, nthvert)); // read the vertex from .obj file
